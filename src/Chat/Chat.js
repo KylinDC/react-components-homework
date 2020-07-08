@@ -31,9 +31,20 @@ class Chat extends Component {
 
   handleChatSend(message) {
     const { messages } = this.state;
-    if (message !== '') {
+    if (message) {
+      messages.push({ role: ROLE.CUSTOMER, text: message });
+
+      const response = [];
+      answersData.forEach((answer) =>
+        answer.tags.forEach((tag) => {
+          if (message.indexOf(tag) !== -1) {
+            response.push(answer);
+          }
+        })
+      );
+
       this.setState({
-        messages: [...messages, { role: ROLE.CUSTOMER, text: message }],
+        messages: messages.concat(response),
       });
     }
   }
