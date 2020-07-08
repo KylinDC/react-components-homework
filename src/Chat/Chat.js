@@ -5,6 +5,7 @@ import ChatBox from './ChatBox/ChatBox';
 import ChatInput from './ChatInput/ChatInput';
 import shopData from '../data/shop.json';
 import answersData from '../data/answers.json';
+import { ROLE } from '../constants';
 
 class Chat extends Component {
   constructor(props, context) {
@@ -13,6 +14,7 @@ class Chat extends Component {
       shop: {},
       messages: [],
     };
+    this.handleChatSend = this.handleChatSend.bind(this);
   }
 
   componentDidMount() {
@@ -27,13 +29,22 @@ class Chat extends Component {
     }, 1000);
   }
 
+  handleChatSend(message) {
+    const { messages } = this.state;
+    if (message !== '') {
+      this.setState({
+        messages: [...messages, { role: ROLE.CUSTOMER, text: message }],
+      });
+    }
+  }
+
   render() {
     const { shop, messages } = this.state;
     return (
       <main className="Chat">
         <ChatHeader shop={shop} />
         <ChatBox messages={messages} />
-        <ChatInput />
+        <ChatInput handleSend={this.handleChatSend} />
       </main>
     );
   }
