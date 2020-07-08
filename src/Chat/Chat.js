@@ -29,19 +29,25 @@ class Chat extends Component {
     }, 1000);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getResponseFromRobot(message) {
+    const response = [];
+    answersData.forEach((answer) =>
+      answer.tags.forEach((tag) => {
+        if (message.indexOf(tag) !== -1) {
+          response.push(answer);
+        }
+      })
+    );
+    return response;
+  }
+
   handleChatSend(message) {
     const { messages } = this.state;
     if (message) {
       messages.push({ role: ROLE.CUSTOMER, text: message });
 
-      const response = [];
-      answersData.forEach((answer) =>
-        answer.tags.forEach((tag) => {
-          if (message.indexOf(tag) !== -1) {
-            response.push(answer);
-          }
-        })
-      );
+      const response = this.getResponseFromRobot(message);
 
       this.setState({
         messages: messages.concat(response),
